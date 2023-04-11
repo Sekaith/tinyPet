@@ -2,6 +2,8 @@
 
 Par Bourmaud Thomas et Richard Mathias
 
+Voila le lien du site : https://plasma-bison-375314.ew.r.appspot.com/
+
 KINDS utilisé lors du projet :
 ![image](https://user-images.githubusercontent.com/73703314/231224946-7a82cd8a-9b04-4ab6-b66a-743060c04705.png)
 
