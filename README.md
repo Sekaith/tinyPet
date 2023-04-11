@@ -4,5 +4,7 @@ KINDS utilisé lors du projet :
 Les fonctionnalitées de création, et signatures de pétition fonctionnent, ainsi que les fonctionnalitées d'affichage des pétitions signées, créé ainsi que le top 5 des pétitions trié par date.
 
 Nous avons modifiés/créés les fichiers suivants : 
+
 Créés  : indexTP.html, infosTP.html, createdTP.html, createTP.html, signedTP.html, tinypetEndPoint.java 
-modifié : web.xml
+
+Modifié : web.xml
