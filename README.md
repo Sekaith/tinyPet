@@ -19,4 +19,6 @@ Créés  :
 
 *src.main.webapp : indexTP.html, infosTP.html, createdTP.html, createTP.html, signedTP.html
 
-Modifié : web.xml, index.yaml
+Modifié : 
+
+web.xml, index.yaml
