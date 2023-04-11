@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The Random Game</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+
+<script src="https://unpkg.com/mithril/mithril.js"></script>
+<script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+<body>
+    
+
+<script>	
+
+var MyRandom = {
+	    value: null,
+	    getRandom: function(name) {
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/getRandom/"
+	        })
+	        .then(function(result) {
+	            MyRandom.value = result.items
+	        	console.log("Random:",MyRandom.value)
+	        	// m.redraw(true) 
+                return MyRandom.value
+	        })
+	    },
+	}
+
+
+var MyRandomView = {
+  oninit: MyRandom.getRandom(),
+  view: function() {
+    return m('div', [
+	  m('div',{class:'subtitle'},"My Random"),
+      m('label',{class:'label'},MyRandom.value),
+	 ])
+  }
+}
+
+var Login = {
+        ID: "",
+        Full_Name:"",
+        Given_Name: "",
+        Family_Name: "",
+        Image_URL:"",
+        Email: "",
+    update:function(response){
+        var responsePayload = jwt_decode(response.credential);
+
+        Login.ID= responsePayload.sub;
+        Login.Full_Name=responsePayload.name;
+        Login.Given_Name= responsePayload.given_name;
+        Login.Family_Name= responsePayload.family_name;
+        Login.Image_URL= responsePayload.picture;
+        Login.Email= responsePayload.email;
+
+        document.getElementById("MyRandomViewID").setAttribute("style", "display:block")
+        m.redraw();
+    }
+}
+
+var LoginView = {
+    view: function() {
+        return m('div', [
+            m('div',{class:'subtitle'},"Connexion :",[
+                m('div', {
+                    id:"g_id_onload",
+                    "data-client_id":"59984564463-p06vp32rova2ubjkdnhdu0f7d4rbb7j7.apps.googleusercontent.com",
+                    "data-callback":"handleCredentialResponse"
+                }),
+                m('div', {class:"g_id_signin", "data-type":"standard"})
+            ])
+        ])
+  }
+}
+
+var handleCredentialResponse = function(response){
+    console.log("callback called:"+response.credential)
+        // decodeJwtResponse() is a custom function defined by you
+        // to decode the credential response.
+        const responsePayload = jwt_decode(response.credential);
+        Login.update(response);
+}
+
+var Hello = {
+   view: function() {
+   	return m('div', {class:'container'}, [
+           m("h1", {class: 'title'}, 'The Random Game'),
+           m("div", {class: 'tile', id:"LoginViewID"}, m('div',{class:'tile is-child box'},m(LoginView))),
+           m('div',{class: 'tile is-ancestor'},[
+               //m("div", {class: 'tile', id:"LoginViewID"}, m('div',{class:'tile is-child box'},m(LoginView))),
+               m("div", {class: 'tile', id:"MyRandomViewID", style: 'display:none'}, m('div',{class:'tile is-child box'},m(MyRandomView))),
+           ])
+       ])
+   }
+}
+
+m.mount(document.body, Hello)
+
+
+</script>
+
+
+</body>
+</html>

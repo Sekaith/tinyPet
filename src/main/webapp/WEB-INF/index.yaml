@@ -1,0 +1,21 @@
+indexes:
+- kind: Friend 
+  properties: 
+    - name: friends 
+    - name: age 
+- kind: Score 
+  properties: 
+    - name: name 
+    - name: score
+      direction: desc
+- kind: PetitionTP
+  properties:
+    - name: Proprietaire
+    - name: Date
+      direction: desc
+- kind: PetitionTP
+  properties:
+    - name: Votants
+    - name: Date
+      direction: desc         
+    

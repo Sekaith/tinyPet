@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tinypet 2023</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mithril@2.2.2/mithril.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #8b8b8b;
+            color: #fff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            background-color: #202020;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #fff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+            /* soustrait la hauteur de la barre horizontale */
+            margin: 0px;
+            max-width: 100%;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            background-color: #2c2c2c;
+            width: 200px;
+        }
+
+        .menu button {
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #4b4b4b;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            width: 150px;
+            color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .menu button:hover {
+            background-color: #FFA31A;
+            color: #fff;
+        }
+
+        .container button {
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #4b4b4b;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .container button:hover {
+            background-color: #FFA31A;
+            color: #fff;
+        }
+        .container.tile.is-vertical button {
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #4b4b4b;
+            cursor: pointer;
+            font-weight: bold;
+            width:150px;
+            border-radius: 5px;
+            color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .container.tile.is-vertical button:hover {
+            background-color: #FFA31A;
+            color: #fff;
+        }
+        
+        .content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #dfdede;
+        }
+
+        .google-signin {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .google-signin button {
+            background-color: #FFA31A;
+            border: none;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            font-weight: bold;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            color: #fff;
+        }
+
+        .google-signin button:hover {
+            background-color: #ffaf4f;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+       
+        var PetitionView = {
+    view: function () {
+        return m('div', [
+            m('div', { class: 'subtitle' }, "Créer une pétition"),
+            
+                m('div', { class: 'field' }, [
+                    m('label', { class: 'label' }, 'Titre de la pétition'),
+                    m('div', { class: 'control' }, [
+                        m('input', { class: 'input', type: 'text', name: 'title', required: true })
+                    ])
+                ]),
+                m('div', { class: 'field' }, [
+                    m('label', { class: 'label' }, 'Description de la pétition'),
+                    m('div', { class: 'control' }, [
+                        m('textarea', { class: 'textarea', name: 'description', required: true })
+                    ])
+                ]),
+                m('div', { class: 'field' }, [
+                    m('button', { class: 'button', onclick: createTP}, 'Enregistrer')
+                ])
+            ])
+        
+    }
+}
+
+var Login = {
+            ID: "",
+            Full_Name: "",
+            Given_Name: "",
+            Family_Name: "",
+            Image_URL: "",
+            Email: "",
+            update: function (response) {
+                var responsePayload = jwt_decode(response.credential);
+                Login.ID = response.credential;
+                Login.Sub = responsePayload.Sub;
+                Login.Full_Name = responsePayload.name;
+                Login.Given_Name = responsePayload.given_name;
+                Login.Family_Name = responsePayload.family_name;
+                Login.Image_URL = responsePayload.picture;
+                Login.Email = responsePayload.email;
+            }
+        }
+
+        var LoginView = {
+            view: function () {
+                return m('div', [
+                    m('div', { class: 'subtitle' }, "Connexion :", [
+                        m('div', {
+                            id: "g_id_onload",
+                            "data-client_id": "59984564463-p06vp32rova2ubjkdnhdu0f7d4rbb7j7.apps.googleusercontent.com",
+                            "data-callback": "handleCredentialResponse"
+                        }),
+                        m('div', { class: "g_id_signin", "data-type": "standard" })
+                    ])
+                ])
+            }
+        }
+
+        var handleCredentialResponse = function (response) {
+            console.log("callback called:" + response.credential)
+            // decodeJwtResponse() is a custom function defined by you
+            // to decode the credential response.
+            const responsePayload = jwt_decode(response.credential);
+            Login.update(response);
+        }
+
+        var App = {
+            view: function () {
+                return m("div", [
+                    m(".header", [m('h1',
+                    m('span',{ style: {fontWeight:'B', font:'1.2em'}},'Tiny '),
+                    m('span',{ style: { backgroundColor: '#FFA31A',borderRadius: '10px',padding: '0 5px',color: 'black', fontWeight:'B',font:'1.2em'}},'Pet'))]),
+                    m(".container", [
+                        m(".menu", [
+                        m("button", { onclick: function () { window.location.href = '../'; } }, "Accueil"),
+                            m("button", { onclick: createPetition }, "Créer une pétition"),
+                            m("button", { onclick: myCreatedPetitions }, "Voir mes pétitions créées"),
+                            m("button", { onclick: mySignedPetitions }, "Voir mes pétitions signées")
+                        ]),
+                        m(".container.tile.is-vertical", [
+                            m("div", { class: 'tile', id: "LoginViewID", style: "max-height: 100px; background:white;" }, m('div', { class: 'tile is-child box' }, m(LoginView))),
+                            m("div", { class: 'tile', id: "PetitionViewID", style: "background:white;" }, m('div', { class: 'tile is-child box' }, m(PetitionView))),
+                        ]),
+                    ]),
+                ]);
+            }
+        };
+
+
+        function createPetition() {
+            // fonction pour créer une pétition
+
+            window.location.href = '/createTP.html';
+        }
+
+        function myCreatedPetitions() {
+            // fonction pour voir mes pétitions créées
+            window.location.href = '/createdTP.html';
+        }
+
+        function mySignedPetitions() {
+            // fonction pour voir mes pétitions signées
+            window.location.href = '/signedTP.html';
+        }
+
+        function createTP(){
+            
+            var title = document.getElementsByName("title")[0].value;
+            var description = document.getElementsByName("description")[0].value;
+
+            return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/addPetition/"+title+"/"+description+"/?access_token=" + Login.ID
+	            }).then(function (result) {
+                    
+                    window.location.href = '../';
+
+                    })
+
+        }
+
+        m.mount(document.body, App);
+    </script>
+</body>
+
+</html>
