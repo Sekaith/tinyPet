@@ -1,3 +1,5 @@
+Par Bourmaud Thomas et Richard Mathias
+
 KINDS utilisé lors du projet :
 ![image](https://user-images.githubusercontent.com/73703314/231209521-b9039fed-224b-48bb-947c-4b6d2bd525b9.png)
 
