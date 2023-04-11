@@ -14,7 +14,9 @@ Les fonctionnalitées de création, et signatures de pétition fonctionnent, ain
 *Nous avons modifiés/créés les fichiers suivants : 
 
 Créés  : 
+
 *src.main.java.foo : tinypetEndPoint.java 
 
 *src.main.webapp : indexTP.html, infosTP.html, createdTP.html, createTP.html, signedTP.html
+
 Modifié : web.xml, index.yaml
