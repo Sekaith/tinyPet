@@ -7,4 +7,4 @@ Nous avons modifiés/créés les fichiers suivants :
 
 Créés  : indexTP.html, infosTP.html, createdTP.html, createTP.html, signedTP.html, tinypetEndPoint.java 
 
-Modifié : web.xml
+Modifié : web.xml, index.yaml
